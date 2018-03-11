@@ -70,6 +70,16 @@ router.route('/users')
 		})
 	})
 
+//delete all users
+  .delete(function(req, res) {
+    User.remove({}, function(err, user) {
+      if (err) {
+        res.send(err)
+      }
+      res.json({ message: 'All users deleted!' })
+    })
+	})
+
 // create a /api/users/id route (id is a variable, that has to be inserted in the URL)
 router.route('/users/:user_id')
 
