@@ -53,21 +53,62 @@ router.route('/users')
 		var user = new User()		           // create a new instance of the User model
 		user.name = req.query.name         // set the users name (comes from the request)
 		user.save(function(err) {
-			if (err)
+			if (err) {
 				res.send(err)
+      }
 			res.json({ message: 'User created!' })
 		})
 	})
 
-	// get all usersby a GET-method (accessed at GET http://localhost:8080/api/users)
+// get all usersby a GET-method (accessed at GET http://localhost:8080/api/users)
 	.get(function(req, res) {
 		User.find(function(err, users) {   // search for every User
-			if (err)
+			if (err) {
 				res.send(err)
+      }
 			res.json(users)
 		})
 	})
 
+// create a /api/users/id route (id is a variable, that has to be inserted in the URL)
+router.route('/users/:user_id')
+
+// get the user with given id
+  	.get(function(req, res) {
+  		User.findById(req.params.user_id, function(err, user) {
+  			if (err)
+  				res.send(err)
+  			res.json(user)
+  		})
+  	})
+
+// update the user with given id
+  	.put(function(req, res) {
+  		User.findById(req.params.user_id, function(err, user) {
+  			if (err) {
+  				res.send(err)
+        }
+  			user.name = req.query.name
+  			user.save(function(err) {
+  				if (err) {
+  					res.send(err)
+          }
+  				res.json({ message: 'User updated!' })
+  			})
+  		})
+  	})
+
+// delete the user with the given id
+  	.delete(function(req, res) {
+  		User.remove({
+  			_id: req.params.user_id
+  		}, function(err, user) {
+  			if (err) {
+  				res.send(err)
+        }
+  			res.json({ message: 'User deleted!' })
+  		})
+  	})
 
 // prefix all routes with /api
 app.use('/api', router)
