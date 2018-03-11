@@ -2,12 +2,23 @@
 const express = require('express')
 const app = express()
 
-const port = process.env.PORT || 8080
+// import mongoose
+const mongoose = require('mongoose')
 
-app.use('/', function (req, res) {
-  res.send('Hello world!')
+// connect to a mongo database
+mongoose.connect('mongodb://testmongodb01:testmongodb01test@ds111299.mlab.com:11299/node_api_test')
+
+// check mongo connection
+var db = mongoose.connection
+db.on('error', console.error.bind(console, 'connection error:'))
+db.once('open', function() {
+  console.log("DB connection alive")
 })
 
+// set port
+const port = process.env.PORT || 8080
+
+// listen on the port set before
 app.listen(port, function () {
-  console.log('Example app listening on port 3000!')
+  console.log(`Example app listening on port ${port}!`)
 })
